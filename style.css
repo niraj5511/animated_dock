@@ -1,0 +1,157 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, #1a1a1f, #050505 70%);
+  font-family: -apple-system, "Helvetica Neue", sans-serif;
+}
+.dock-wrap {
+  position: relative;
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+/* text layer uses the SAME padding/gap/width as the icon row so each
+   letter sits directly above its matching icon */
+.text-layer {
+  position: absolute;
+  bottom: 42px;
+  display: flex;
+  gap: 12px;
+  padding: 0 14px;
+  pointer-events: none;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+.text-layer span {
+  width: 46px;
+  text-align: center;
+  color: rgba(255,255,255,0.75);
+  font-size: 16px;
+  font-weight: 600;
+}
+.dock-wrap.active .text-layer {
+  opacity: 0;
+  filter: blur(4px);
+}
+.dock-panel {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.dock-wrap.active .dock-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  transform: scale(0) translateY(14px);
+  opacity: 0;
+  transform-origin: bottom center;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.15s ease;
+  will-change: transform;
+}
+.dock-wrap.active .icon {
+  animation: revealIcon 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes revealIcon {
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  transition: fill 0.2s ease;
+}
+.icon.hovered {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+.icon[data-brand="github"].hovered { background: #181717; color: #fff; }
+.icon[data-brand="facebook"].hovered { background: #1877f2; color: #fff; }
+.icon[data-brand="instagram"].hovered {
+  background: radial-gradient(circle at 30% 110%, #fdf497, #fd5949 30%, #d6249f 60%, #285AEB 90%);
+  color: #fff;
+}
+.icon[data-brand="linkedin"].hovered { background: #0a66c2; color: #fff; }
+.icon[data-brand="discord"].hovered { background: #5865f2; color: #fff; }
+.icon[data-brand="twitter"].hovered { background: #1da1f2; color: #fff; }
+.icon[data-brand="mail"].hovered { background: #ffb020; color: #fff; }
+
+.dot {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.icon.hovered .dot { opacity: 1; }
+
+.tooltip {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px) scale(0.85);
+  background: rgba(245,245,247,0.97);
+  color: #111;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(245,245,247,0.97);
+}
+.icon.hovered .tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+.hint {
+  position: absolute;
+  bottom: -26px;
+  color: #3a3a3a;
+  font-size: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  letter-spacing: 0.5px;
+}
